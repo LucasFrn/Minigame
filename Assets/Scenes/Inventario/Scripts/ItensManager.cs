@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItensManager : MonoBehaviour
 {
@@ -10,15 +11,16 @@ public class ItensManager : MonoBehaviour
         {
             itemName = "Potion",
             itemIcon = Resources.Load<Sprite>("PotionIcon"), // Substitua pelo caminho do sprite
-            itemQuantity = 5
+            itemQuantity = 0
         };
 
         Item shovel = new Item
         {
             itemName = "Shovel",
             itemIcon = Resources.Load<Sprite>("ShovelIcon"), // Substitua pelo caminho do sprite
-            itemQuantity = 1
+            itemQuantity = 0
         };
+        
 
         // Adiciona itens ao inventário
         playerInventory.AddItem(potion);
@@ -26,6 +28,7 @@ public class ItensManager : MonoBehaviour
 
         // Atualiza a UI do inventário
         FindObjectOfType<InventoryUI>().UpdateUI();
-    }
-
+        
+    }       
 }
+ 

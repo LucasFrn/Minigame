@@ -14,24 +14,6 @@ public class InventoryUI : MonoBehaviour
 
     public void UpdateUI()
     {
-        if (inventory == null)
-        {
-            Debug.LogError("InventoryUI: Referência ao inventário está nula!");
-            return;
-        }
-
-        if (itemPanel == null)
-        {
-            Debug.LogError("InventoryUI: Referência ao painel de itens está nula!");
-            return;
-        }
-
-        if (itemSlotPrefab == null)
-        {
-            Debug.LogError("InventoryUI: Prefab de slot de item está nulo!");
-            return;
-        }
-
         // Limpa os slots antigos
         foreach (Transform child in itemPanel)
         {
@@ -43,21 +25,59 @@ public class InventoryUI : MonoBehaviour
         {
             GameObject slot = Instantiate(itemSlotPrefab, itemPanel);
 
-            // Verifica componentes do prefab
+            // Localiza os componentes no prefab
             var itemName = slot.transform.Find("itemName");
             var itemQuantity = slot.transform.Find("itemQuantity");
             var itemIcon = slot.transform.Find("itemIcon");
 
             if (itemName == null || itemQuantity == null || itemIcon == null)
             {
-                Debug.LogError("InventoryUI: O prefab não contém os componentes esperados!");
+                Debug.LogError("InventoryUI: Componentes esperados não encontrados no prefab!");
                 continue;
             }
 
-            itemName.GetComponent<Text>().text = item.itemName;
-            itemQuantity.GetComponent<Text>().text = $"x{item.itemQuantity}";
-            itemIcon.GetComponent<Image>().sprite = item.itemIcon;
+            // Verifica e atualiza o nome
+            var nameText = itemName.GetComponent<Text>();
+            if (nameText != null)
+            {
+                nameText.text = item.itemName;
+            }
+            else
+            {
+                Debug.LogError("InventoryUI: Componente 'Text' não encontrado em itemName!");
+            }
+
+            // Verifica e atualiza a quantidade
+            var quantityText = itemQuantity.GetComponent<Text>();
+            if (quantityText != null)
+            {
+                quantityText.text = $"x{item.itemQuantity}";
+            }
+            else
+            {
+                Debug.LogError("InventoryUI: Componente 'Text' não encontrado em itemQuantity!");
+            }
+
+            // Verifica e atualiza o ícone
+            var iconImage = itemIcon.GetComponent<Image>();
+            if (iconImage != null)
+            {
+                if (item.itemIcon != null)
+                {
+                    iconImage.sprite = item.itemIcon;
+                }
+                else
+                {
+                    Debug.LogWarning($"Item '{item.itemName}' não possui um ícone atribuído!");
+                    iconImage.color = Color.clear; // Torna o ícone invisível
+                }
+            }
+            else
+            {
+                Debug.LogError("InventoryUI: Componente 'Image' não encontrado em itemIcon!");
+            }
         }
     }
 
 }
+
